@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "订阅消息测试工具",
+  "usingComponents": {
+    "van-cell-group": "../../vant/components/cell-group/index",
+    "van-cell": "../../vant/components/cell/index",
+    "van-field": "../../vant/components/field/index"
+  }
+}

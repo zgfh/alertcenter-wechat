@@ -1,0 +1,24 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <button type="primary" wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+
+  </view>
+</view>
+<view class="view-container">
+
+  <form bindsubmit="subscribeMsgAndSend">
+    <van-cell-group>
+      <van-field label="告警名" name="name" value="{{ form.name }}" type="textarea" placeholder="请填写告警名" clearable autosize />
+    </van-cell-group>
+    <view class="action">
+      <button formType="submit" type="primary" size="large">订阅并发送消息</button>
+    </view>
+    <text class="user-motto">{{motto}}</text>
+  </form>
+</view>

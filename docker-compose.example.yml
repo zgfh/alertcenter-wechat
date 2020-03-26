@@ -1,0 +1,8 @@
+alertcenter-wechat:
+  build: .
+  ports:
+    - "5000:5000"
+  environment:
+    - WX_OPENID=wx831a0368ab982cb7
+    - WX_APPSECRET=3a701d5864d78dbaccacd2e0818502db
+    - WX_TEMPLATE_ID=UTZBbCNX1MBg0ISZDMItKG9IyqVrEquka_Q_JMYgCao
