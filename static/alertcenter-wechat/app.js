@@ -1,4 +1,6 @@
 //app.js
+import api from 'utils/api.js'
+import config from 'utils/config.js'
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -9,8 +11,13 @@ App({
     // 登录
     wx.login({
       success: res => {
-        console.log(res)
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log("wechat login result", res)
+        api.login(res.code).then(res => {
+          console.log("api: get openid result", res)
+            this.globalData.openid = res.data.openid
+
+          // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        })
       }
     })
     // 获取用户信息
@@ -35,6 +42,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    openid: "",
+    tmplIds: config.tmplIds
   }
 })

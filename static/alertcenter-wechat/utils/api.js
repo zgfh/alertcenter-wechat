@@ -1,9 +1,14 @@
 import request from './request.js'
 import util from './util.js'
 export default {
-  sendAlert(code, userName, alertName) {
+  login(code) {
+    return request.post("/users", {
+      "code": code
+    })
+  },
+  sendAlert(openid, userName, alertName) {
     return request.post('/alerts', {
-      "code": code,
+      "openid": openid,
       "data": {
         "thing1": {
           "value": alertName

@@ -1,0 +1,9 @@
+<!--pages/about_me/about.wxml-->
+<view class="view-container">
+<text class="about_me">
+详细代码请参考: https://github.com/zgfh/alertcenter-wechat
+
+你可以通过下面的命令发送告警信息
+{{msg}}
+</text>
+</view>

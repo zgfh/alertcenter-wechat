@@ -1,0 +1,9 @@
+/* pages/about_me/about.wxss */
+
+.about_me {
+  margin: 20rpx;
+  display: flex;
+  flex-direction: column;
+  color: #aaa;
+  align-items: center;
+}

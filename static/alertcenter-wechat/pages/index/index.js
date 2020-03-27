@@ -1,32 +1,28 @@
 //index.js
 import api from '../../utils/api.js'
+import Notify from '../../vant/components/notify/notify';
 //获取应用实例
 const app = getApp()
 
 Page({
   data: {
-    motto: '',
+    motto: '点击订阅后才能发送消息,如果需要发送请设置告警名',
     userInfo: {},
     form: {
-      todo: '',
+      description: '',
       name: ''
     },
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
-  //事件处理函数
-  bindViewTap: function() {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-  },
-  onLoad: function () {
+
+  onLoad: function() {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse){
+    } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
@@ -57,36 +53,59 @@ Page({
       hasUserInfo: true
     })
   },
-  subscribeMsgAndSend: function (e) {
-    const form = this.data.form;
+  subscribeMsg: function(e) {
+    var that = this
+    that.setData({
+      motto: "订阅中...",
+    })
+    wx.requestSubscribeMessage({
+      tmplIds: app.globalData.tmplIds,
+      success(res) {
+        that.setData({
+          motto: `订阅成功,你可以通过curl -H 'Content-Type: application/json' -d '{"name":"xx","description":"xx"}' https:/ / alertcenter.daozzg.com / alerts / xx 发送告警`,
+        })
+      }
+    })
+
+  },
+  onChange: function(e) {
+    var that = this
+    let form = that.data.form
+    form.name = e.detail
+    console.log(e.detail)
+    that.setData({
+      form: form
+    })
+    console.log("alertnane: ", form.name, that.data)
+  },
+  subscribeMsgAndSend: function(e) {
+    this.setData({
+      form: e.detail.value
+    })
+    var form = this.data.form;
     const userInfo = this.data.userInfo;
-    console.log("---")
-    var that=this
+    var that = this
     that.setData({
       motto: "订阅中...",
     })
     console.log(e)
     wx.requestSubscribeMessage({
-      tmplIds: ['UTZBbCNX1MBg0ISZDMItKG9IyqVrEquka_Q_JMYgCao'],
+      tmplIds: app.globalData.tmplIds,
       success(res) {
         that.setData({
-          motto: "订阅成功",
+          motto: `订阅成功`,
         })
-
-        wx.login({
-          success: res => {
-            var alertname = form.name
-            if (alertname==""){
-              alertname="test"
-            }
-            console.log(res)
-            console.log(userInfo)
-            api.sendAlert(res.code, userInfo.nickName, alertname)
-            // 发送 res.code 到后台换取 openId, sessionKey, unionId
-          }
-        })
+        console.log("form:", form)
+        var alertname = form.name
+        if (alertname == "") {
+          Notify('订阅成功,告警名未设置忽略发送消息');
+          return
+        }
+        console.log("send alert", userInfo)
+        api.sendAlert(app.globalData.openid, userInfo.nickName, alertname, form.description)
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
-    
+
   }
 })

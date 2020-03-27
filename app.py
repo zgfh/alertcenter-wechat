@@ -13,12 +13,25 @@ def index():
     return 'alertcenter-wechat api'
 
 
+@app.route('/users', methods=['POST'])
+def login():
+    code = request.get_json().get('code', '')
+    if code == "":
+        return jsonify({"result": "need code"}), 400
+    openid = wxSdk.get_openid(code)
+    app.logger.info("openid: get %s  with code: %s", openid, code)
+    return jsonify({"openid": openid})
+
+
 @app.route('/alerts', methods=['POST'])
 def Addalerts():
     data = request.get_json()
-    openid = wxSdk.get_openid(data['code'])
+    openid = data.get('openid')
+    msg_data = data.get('data')
     app.logger.info("openid: %s alert data: %s", openid, data)
-    result = wxSdk.subscribe_send(openid, data['data'])
+    if not openid or not msg_data:
+        return jsonify({"result": "need openid,msg_data"}), 400
+    result = wxSdk.subscribe_send(openid, msg_data)
     app.logger.info("subscribe_msg_send result: %s", result)
     return jsonify({"result": "ok"})
 

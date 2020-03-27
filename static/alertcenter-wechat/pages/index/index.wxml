@@ -7,18 +7,34 @@
       <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{userInfo.nickName}}</text>
     </block>
-
   </view>
+
 </view>
 <view class="view-container">
+<form bindsubmit="subscribeMsgAndSend">
+  <view >
+    
+      <van-cell-group>
+        <van-field label="告警名" bind:change="onChange" name="name" value="{{ form.name }}" type="textarea" placeholder="请填写告警名" clearable autosize />
+      </van-cell-group>
+      <van-cell-group>
+        <van-field label="告警描述" name="description" value="{{ form.description }}" type="textarea" placeholder="请填写告警名" clearable autosize />
+      </van-cell-group>
+      <button formType="submit" type="primary" size="large">
+        <block wx:if="{{ form.name === ''}}">
+          订阅消息
+        </block>
+        <block wx:else>
+          订阅消息并发送
+        </block>
 
-  <form bindsubmit="subscribeMsgAndSend">
-    <van-cell-group>
-      <van-field label="告警名" name="name" value="{{ form.name }}" type="textarea" placeholder="请填写告警名" clearable autosize />
-    </van-cell-group>
-    <view class="action">
-      <button formType="submit" type="primary" size="large">订阅并发送消息</button>
-    </view>
-    <text class="user-motto">{{motto}}</text>
-  </form>
+      </button>
+   
+  </view>
+ </form>
+  <view >
+    <text class="usermotto">{{motto}}</text>
+    <van-notify id="van-notify" />
+  </view>
+
 </view>
